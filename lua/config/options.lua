@@ -116,3 +116,6 @@ opt.wrap = false -- Disable line wrap
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
+
+-- 自定义配置
+vim.o.background = "light"
