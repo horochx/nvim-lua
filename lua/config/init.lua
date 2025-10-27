@@ -13,13 +13,6 @@ local defaults = {
   colorscheme = function()
     require("tokyonight").load()
   end,
-  -- load the default settings
-  defaults = {
-    autocmds = true, -- config.autocmds
-    keymaps = true, -- config.keymaps
-    -- config.options can't be configured here since that's loaded before lazyvim setup
-    -- if you want to disable loading options, add `package.loaded["config.options"] = true` to the top of your init.lua
-  },
   news = {
     -- When enabled, NEWS.md will be shown when changed.
     -- This only contains big new features and breaking changes.
@@ -225,15 +218,14 @@ function M.setup(opts)
           end
         end
       end
-      local lazyvim_plugins = find("^lazyvim%.plugins$")
-      local extras = find("^lazyvim%.plugins%.extras%.", true) or lazyvim_plugins
-      local plugins = find("^plugins$") or math.huge
-      if lazyvim_plugins ~= 1 or extras > plugins then
+      -- Since we're using local plugins now, check that plugins are loaded in correct order
+      local plugins_base = find("^plugins$")
+      local extras = find("^plugins%.extras%.", true) or plugins_base
+      if plugins_base and extras and extras < plugins_base then
         local msg = {
           "The order of your `lazy.nvim` imports is incorrect:",
-          "- `lazyvim.plugins` should be first",
-          "- followed by any `lazyvim.plugins.extras`",
-          "- and finally your own `plugins`",
+          "- `plugins` should be loaded first",
+          "- followed by any `plugins.extras`",
           "",
           "If you think you know what you're doing, you can disable this check with:",
           "```lua",
@@ -282,25 +274,22 @@ end
 
 ---@param name "autocmds" | "options" | "keymaps"
 function M.load(name)
-  local function _load(mod)
-    if require("lazy.core.cache").find(mod)[1] then
-      LazyVim.try(function()
-        require(mod)
-      end, { msg = "Failed loading " .. mod })
-    end
+  local mod = "config." .. name
+  -- Only load if the module exists
+  if require("lazy.core.cache").find(mod)[1] then
+    LazyVim.try(function()
+      require(mod)
+    end, { msg = "Failed loading " .. mod })
   end
+
+  -- Trigger autocmd event for plugins that may hook into this
   local pattern = "LazyVim" .. name:sub(1, 1):upper() .. name:sub(2)
-  -- always load lazyvim, then user file
-  if M.defaults[name] or name == "options" then
-    _load("config." .. name)
-    vim.api.nvim_exec_autocmds("User", { pattern = pattern .. "Defaults", modeline = false })
-  end
-  _load("config." .. name)
+  vim.api.nvim_exec_autocmds("User", { pattern = pattern, modeline = false })
+
   if vim.bo.filetype == "lazy" then
-    -- HACK: LazyVim may have overwritten options of the Lazy ui, so reset this here
+    -- HACK: reset Lazy UI options that may have been overwritten
     vim.cmd([[do VimResized]])
   end
-  vim.api.nvim_exec_autocmds("User", { pattern = pattern, modeline = false })
 end
 
 M.did_init = false
