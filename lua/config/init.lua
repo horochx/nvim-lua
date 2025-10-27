@@ -11,7 +11,7 @@ local defaults = {
   -- colorscheme can be a string like `catppuccin` or a function that will load the colorscheme
   ---@type string|fun()
   colorscheme = function()
-    require("tokyonight").load()
+    require("tokyonight").load({ style = "day" })
   end,
   news = {
     -- When enabled, NEWS.md will be shown when changed.
