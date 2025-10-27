@@ -18,7 +18,7 @@ local LazyUtil = require("lazy.core.util")
 ---@field cmp lazyvim.util.cmp
 ---@field deprecated lazyvim.util.deprecated
 local M = {}
-M.deprecated = require("lazyvim.util.deprecated")
+M.deprecated = require("util.deprecated")
 
 setmetatable(M, {
   __index = function(t, k)
@@ -29,7 +29,7 @@ setmetatable(M, {
       return M.deprecated[k]()
     end
     ---@diagnostic disable-next-line: no-unknown
-    t[k] = require("lazyvim.util." .. k)
+    t[k] = require("util." .. k)
     M.deprecated.decorate(k, t[k])
     return t[k]
   end,
@@ -63,8 +63,8 @@ end
 --- * If the module is in the user's lazy imports
 ---@param extra string
 function M.has_extra(extra)
-  local Config = require("lazyvim.config")
-  local modname = "lazyvim.plugins.extras." .. extra
+  local Config = require("config")
+  local modname = "plugins.extras." .. extra
   local LazyConfig = require("lazy.core.config")
   -- check if it was imported already
   if vim.tbl_contains(LazyConfig.spec.modules, modname) then

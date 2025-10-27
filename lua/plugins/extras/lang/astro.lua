@@ -13,7 +13,9 @@ return {
   end,
 
   -- depends on the typescript extra
-  { import = "lazyvim.plugins.extras.lang.typescript" },
+  return {
+  -- depends on the typescript extra
+  { import = "plugins.extras.lang.typescript" },
 
   {
     "nvim-treesitter/nvim-treesitter",

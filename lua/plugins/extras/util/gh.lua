@@ -1,7 +1,8 @@
 return {
 
   -- depends on the git extra for highlighting and auto-completion of github issues/prs
-  { import = "lazyvim.plugins.extras.lang.git" },
+  return {
+  { import = "plugins.extras.lang.git" },
 
   { "ldelossa/litee.nvim", lazy = true },
 

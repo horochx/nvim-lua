@@ -293,7 +293,7 @@ function X:extra(extra)
     self.text:append(" "):append(LazyConfig.options.ui.icons.event .. extra.source.name, "LazyReasonEvent")
   end
   for _, import in ipairs(extra.imports) do
-    import = import:gsub("^lazyvim.plugins.extras.", "")
+    import = import:gsub("^plugins.extras.", "")
     self.text:append(" "):append(LazyConfig.options.ui.icons.plugin .. import, "LazyReasonStart")
   end
   for _, plugin in ipairs(extra.plugins) do

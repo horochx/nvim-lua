@@ -9,11 +9,10 @@ if vim.fn.has("nvim-0.11.2") == 0 then
   return {}
 end
 
-require("lazyvim.config").init()
+require("config").init()
 
 return {
   { "folke/lazy.nvim", version = "*" },
-  { "LazyVim/LazyVim", priority = 10000, lazy = false, opts = {}, cond = true, version = "*" },
   {
     "folke/snacks.nvim",
     priority = 1000,

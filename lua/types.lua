@@ -4,7 +4,7 @@
 vim.g = {}
 
 _G.lazyvim_docs = true
-_G.LazyVim = require("lazyvim.util")
+_G.LazyVim = require("util")
 
 ---@class vim.api.create_autocmd.callback.args
 ---@field id number

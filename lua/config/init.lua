@@ -1,4 +1,4 @@
-_G.LazyVim = require("lazyvim.util")
+_G.LazyVim = require("util")
 
 ---@class LazyVimConfig: LazyVimOptions
 local M = {}
@@ -15,10 +15,10 @@ local defaults = {
   end,
   -- load the default settings
   defaults = {
-    autocmds = true, -- lazyvim.config.autocmds
-    keymaps = true, -- lazyvim.config.keymaps
-    -- lazyvim.config.options can't be configured here since that's loaded before lazyvim setup
-    -- if you want to disable loading options, add `package.loaded["lazyvim.config.options"] = true` to the top of your init.lua
+    autocmds = true, -- config.autocmds
+    keymaps = true, -- config.keymaps
+    -- config.options can't be configured here since that's loaded before lazyvim setup
+    -- if you want to disable loading options, add `package.loaded["config.options"] = true` to the top of your init.lua
   },
   news = {
     -- When enabled, NEWS.md will be shown when changed.
@@ -292,7 +292,7 @@ function M.load(name)
   local pattern = "LazyVim" .. name:sub(1, 1):upper() .. name:sub(2)
   -- always load lazyvim, then user file
   if M.defaults[name] or name == "options" then
-    _load("lazyvim.config." .. name)
+    _load("config." .. name)
     vim.api.nvim_exec_autocmds("User", { pattern = pattern .. "Defaults", modeline = false })
   end
   _load("config." .. name)
@@ -316,8 +316,8 @@ function M.init()
     vim.opt.rtp:append(plugin.dir)
   end
 
-  package.preload["lazyvim.plugins.lsp.format"] = function()
-    LazyVim.deprecate([[require("lazyvim.plugins.lsp.format")]], [[LazyVim.format]])
+  package.preload["plugins.lsp.format"] = function()
+    LazyVim.deprecate([[require("plugins.lsp.format")]], [[LazyVim.format]])
     return LazyVim.format
   end
 
@@ -397,7 +397,7 @@ function M.get_defaults()
     origin = use and "extra" or origin
     use = use or valid[1]
     for _, extra in ipairs(check) do
-      local import = "lazyvim.plugins.extras." .. extra.extra
+      local import = "plugins.extras." .. extra.extra
       extra = vim.deepcopy(extra)
       extra.enabled = extra.name == use
       if extra.enabled then
