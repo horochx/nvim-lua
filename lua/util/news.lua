@@ -28,11 +28,22 @@ function M.welcome()
 end
 
 function M.changelog()
-  M.open("CHANGELOG.md", { plugin = "LazyVim" })
+  -- Since we're using local LazyVim code, look for CHANGELOG.md in config root
+  local changelog = vim.fn.stdpath("config") .. "/CHANGELOG.md"
+  if vim.fn.filereadable(changelog) == 1 then
+    M.open(changelog, {})
+  else
+    LazyVim.warn("CHANGELOG.md not found in config directory")
+  end
 end
 
 function M.lazyvim(when_changed)
-  M.open("NEWS.md", { plugin = "LazyVim", when_changed = when_changed })
+  -- Since we're using local LazyVim code, look for NEWS.md in config root
+  local news = vim.fn.stdpath("config") .. "/NEWS.md"
+  if vim.fn.filereadable(news) == 1 then
+    M.open(news, { when_changed = when_changed })
+  end
+  -- Silently skip if NEWS.md doesn't exist (no need to warn on every startup)
 end
 
 function M.neovim(when_changed)
@@ -53,6 +64,7 @@ function M.open(file, opts)
   elseif opts.rtp then
     file = vim.api.nvim_get_runtime_file(file, false)[1]
   end
+  -- If file is already an absolute path, use it as-is
 
   if not file then
     return LazyVim.error("File not found")

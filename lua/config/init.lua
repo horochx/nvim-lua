@@ -16,7 +16,8 @@ local defaults = {
   news = {
     -- When enabled, NEWS.md will be shown when changed.
     -- This only contains big new features and breaking changes.
-    lazyvim = true,
+    -- Since we're using local code, you need to create NEWS.md in your config directory
+    lazyvim = false,
     -- Same but for Neovim's news.txt
     neovim = false,
   },

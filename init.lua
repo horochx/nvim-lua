@@ -48,3 +48,6 @@ require("lazy").setup({
     },
   },
 })
+
+-- Setup LazyVim configuration
+require("config").setup()
