@@ -311,10 +311,11 @@ function M.init()
     return
   end
   M.did_init = true
-  local plugin = require("lazy.core.config").spec.plugins.LazyVim
-  if plugin then
-    vim.opt.rtp:append(plugin.dir)
-  end
+  -- No longer need to append LazyVim plugin dir since we're using local code
+  -- local plugin = require("lazy.core.config").spec.plugins.LazyVim
+  -- if plugin then
+  --   vim.opt.rtp:append(plugin.dir)
+  -- end
 
   package.preload["plugins.lsp.format"] = function()
     LazyVim.deprecate([[require("plugins.lsp.format")]], [[LazyVim.format]])
