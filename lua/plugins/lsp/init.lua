@@ -1,5 +1,6 @@
 return {
-  -- lspconfig
+  -- LSP 配置核心
+  -- 统一管理所有 LSP 服务器的配置，提供代码补全、诊断、跳转等核心编辑功能
   {
     "neovim/nvim-lspconfig",
     event = "LazyFile",
@@ -11,7 +12,7 @@ return {
     opts = function()
       ---@class PluginLspOpts
       local ret = {
-        -- options for vim.diagnostic.config()
+        -- vim.diagnostic.config() 的选项
         ---@type vim.diagnostic.Opts
         diagnostics = {
           underline = true,
@@ -20,8 +21,6 @@ return {
             spacing = 4,
             source = "if_many",
             prefix = "●",
-            -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-            -- prefix = "icons",
           },
           severity_sort = true,
           signs = {
@@ -33,38 +32,34 @@ return {
             },
           },
         },
-        -- Enable this to enable the builtin LSP inlay hints on Neovim.
-        -- Be aware that you also will need to properly configure your LSP server to
-        -- provide the inlay hints.
+        -- 内联提示功能
+        -- 在代码中直接显示参数类型、返回值等信息，减少来回查看文档的需要
         inlay_hints = {
           enabled = true,
-          exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
+          exclude = { "vue" }, -- 不启用内联提示的文件类型
         },
-        -- Enable this to enable the builtin LSP code lenses on Neovim.
-        -- Be aware that you also will need to properly configure your LSP server to
-        -- provide the code lenses.
+        -- 代码透镜功能
+        -- 在代码上方显示额外信息（如引用数、测试运行按钮等），需要 LSP 服务器支持
         codelens = {
           enabled = false,
         },
-        -- Enable this to enable the builtin LSP folding on Neovim.
-        -- Be aware that you also will need to properly configure your LSP server to
-        -- provide the folds.
+        -- LSP 代码折叠
+        -- 使用 LSP 提供的语义信息进行代码折叠，比基于缩进的折叠更准确
         folds = {
           enabled = true,
         },
-        -- options for vim.lsp.buf.format
-        -- `bufnr` and `filter` is handled by the LazyVim formatter,
-        -- but can be also overridden when specified
+        -- vim.lsp.buf.format 的选项
+        -- 通过 LazyVim 格式化器处理 bufnr 和 filter，但可以覆盖
         format = {
           formatting_options = nil,
           timeout_ms = nil,
         },
-        -- LSP Server Settings
-        -- Sets the default configuration for an LSP client (or all clients if the special name "*" is used).
+        -- LSP 服务器设置
+        -- 为 LSP 客户端设置默认配置（使用特殊名称 "*" 可应用于所有客户端）
         ---@alias lazyvim.lsp.Config vim.lsp.Config|{mason?:boolean, enabled?:boolean, keys?:LazyKeysLspSpec[]}
         ---@type table<string, lazyvim.lsp.Config|boolean>
         servers = {
-          -- configuration for all lsp servers
+          -- 所有 LSP 服务器的通用配置
           ["*"] = {
             capabilities = {
               workspace = {
@@ -103,9 +98,8 @@ return {
           },
           stylua = { enabled = false },
           lua_ls = {
-            -- mason = false, -- set to false if you don't want this server to be installed with mason
-            -- Use this to add any additional keymaps
-            -- for specific lsp servers
+            -- mason = false, -- 如果不想通过 mason 安装此服务器，设置为 false
+            -- 使用此处添加特定 LSP 服务器的额外快捷键
             -- ---@type LazyKeysSpec[]
             -- keys = {},
             settings = {
@@ -134,16 +128,16 @@ return {
             },
           },
         },
-        -- you can do any additional lsp server setup here
-        -- return true if you don't want this server to be setup with lspconfig
+        -- 额外的 LSP 服务器设置
+        -- 如果返回 true，则不会使用 lspconfig 设置此服务器
         ---@type table<string, fun(server:string, opts: vim.lsp.Config):boolean?>
         setup = {
-          -- example to setup with typescript.nvim
+          -- 使用 typescript.nvim 设置的示例
           -- tsserver = function(_, opts)
           --   require("typescript").setup({ server = opts })
           --   return true
           -- end,
-          -- Specify * to use this function as a fallback for any server
+          -- 指定 * 将此函数用作任何服务器的后备处理
           -- ["*"] = function(server, opts) end,
         },
       }
@@ -151,17 +145,17 @@ return {
     end,
     ---@param opts PluginLspOpts
     config = vim.schedule_wrap(function(_, opts)
-      -- setup autoformat
+      -- 设置自动格式化
       LazyVim.format.register(LazyVim.lsp.formatter())
 
-      -- setup keymaps
+      -- 设置快捷键
       for server, server_opts in pairs(opts.servers) do
         if type(server_opts) == "table" and server_opts.keys then
           require("plugins.lsp.keymaps").set({ name = server ~= "*" and server or nil }, server_opts.keys)
         end
       end
 
-      -- inlay hints
+      -- 内联提示
       if opts.inlay_hints.enabled then
         Snacks.util.lsp.on({ method = "textDocument/inlayHint" }, function(buffer)
           if
@@ -174,7 +168,7 @@ return {
         end)
       end
 
-      -- folds
+      -- 代码折叠
       if opts.folds.enabled then
         Snacks.util.lsp.on({ method = "textDocument/foldingRange" }, function()
           if LazyVim.set_default("foldmethod", "expr") then
@@ -183,7 +177,7 @@ return {
         end)
       end
 
-      -- code lens
+      -- 代码透镜
       if opts.codelens.enabled and vim.lsp.codelens then
         Snacks.util.lsp.on({ method = "textDocument/codeLens" }, function(buffer)
           vim.lsp.codelens.refresh()
@@ -194,7 +188,7 @@ return {
         end)
       end
 
-      -- diagnostics
+      -- 诊断信息
       if type(opts.diagnostics.virtual_text) == "table" and opts.diagnostics.virtual_text.prefix == "icons" then
         opts.diagnostics.virtual_text.prefix = function(diagnostic)
           local icons = LazyVim.config.icons.diagnostics
@@ -219,7 +213,10 @@ return {
         vim.lsp.config("*", opts.servers["*"])
       end
 
-      -- get all the servers that are available through mason-lspconfig
+      })
+      end
+
+      -- 获取通过 mason-lspconfig 可用的所有服务器
       local have_mason = LazyVim.has("mason-lspconfig.nvim")
       local mason_all = have_mason
           and vim.tbl_keys(require("mason-lspconfig.mappings").get_mason_map().lspconfig_to_package)
@@ -244,7 +241,7 @@ return {
         if setup and setup(server, sopts) then
           mason_exclude[#mason_exclude + 1] = server
         else
-          vim.lsp.config(server, sopts) -- configure the server
+          vim.lsp.config(server, sopts) -- 配置服务器
           if not use_mason then
             vim.lsp.enable(server)
           end
@@ -262,7 +259,8 @@ return {
     end),
   },
 
-  -- cmdline tools and lsp servers
+  -- 命令行工具和 LSP 服务器管理
+  -- 提供统一的包管理界面，用于安装和管理各种开发工具
   {
 
     "mason-org/mason.nvim",
@@ -282,7 +280,7 @@ return {
       local mr = require("mason-registry")
       mr:on("package:install:success", function()
         vim.defer_fn(function()
-          -- trigger FileType event to possibly load this newly installed LSP server
+          -- 触发 FileType 事件以加载新安装的 LSP 服务器
           require("lazy.core.handler.event").trigger({
             event = "FileType",
             buf = vim.api.nvim_get_current_buf(),
