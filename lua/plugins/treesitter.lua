@@ -1,19 +1,18 @@
 return {
 
-  -- Treesitter is a new parser generator tool that we can
-  -- use in Neovim to power faster and more accurate
-  -- syntax highlighting.
+  -- Tree-sitter 语法解析器
+  -- 提供更快更准确的语法高亮，是现代编辑器语法分析的基础
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    version = false, -- last release is way too old and doesn't work on Windows
+    version = false, -- 最新发布版本太旧，在 Windows 上无法工作
     build = function()
       local TS = require("nvim-treesitter")
       if not TS.get_installed then
         LazyVim.error("Please restart Neovim and run `:TSUpdate` to use the `nvim-treesitter` **main** branch.")
         return
       end
-      -- make sure we're using the latest treesitter util
+      -- 确保使用最新的 treesitter 工具
       package.loaded["lazyvim.util.treesitter"] = nil
       LazyVim.treesitter.build(function()
         TS.update(nil, { summary = true })
@@ -25,7 +24,7 @@ return {
     ---@alias lazyvim.TSFeat { enable?: boolean, disable?: string[] }
     ---@class lazyvim.TSConfig: TSConfig
     opts = {
-      -- LazyVim config for treesitter
+      -- LazyVim 的 treesitter 配置
       indent = { enable = true }, ---@type lazyvim.TSFeat
       highlight = { enable = true }, ---@type lazyvim.TSFeat
       folds = { enable = true }, ---@type lazyvim.TSFeat
@@ -115,17 +114,17 @@ return {
               and LazyVim.treesitter.have(ft, query)
           end
 
-          -- highlighting
+          -- 高亮
           if enabled("highlight", "highlights") then
             pcall(vim.treesitter.start, ev.buf)
           end
 
-          -- indents
+          -- 缩进
           if enabled("indent", "indents") then
             LazyVim.set_default("indentexpr", "v:lua.LazyVim.treesitter.indentexpr()")
           end
 
-          -- folds
+          -- 代码折叠
           if enabled("folds", "folds") then
             if LazyVim.set_default("foldmethod", "expr") then
               LazyVim.set_default("foldexpr", "v:lua.LazyVim.treesitter.foldexpr()")
@@ -136,6 +135,8 @@ return {
     end,
   },
 
+  -- Tree-sitter 文本对象
+  -- 提供基于语法树的移动和选择功能，让代码导航更智能
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     branch = "main",
@@ -143,8 +144,8 @@ return {
     opts = {
       move = {
         enable = true,
-        set_jumps = true, -- whether to set jumps in the jumplist
-        -- LazyVim extention to create buffer-local keymaps
+        set_jumps = true, -- 是否在跳转列表中设置跳转点
+        -- LazyVim 扩展，用于创建缓冲区本地快捷键
         keys = {
           goto_next_start = { ["]f"] = "@function.outer", ["]c"] = "@class.outer", ["]a"] = "@parameter.inner" },
           goto_next_end = { ["]F"] = "@function.outer", ["]C"] = "@class.outer", ["]A"] = "@parameter.inner" },
@@ -198,7 +199,8 @@ return {
     end,
   },
 
-  -- Automatically add closing tags for HTML and JSX
+  -- HTML/JSX 自动标签闭合
+  -- 自动添加 HTML 和 JSX 的闭合标签，减少手动输入
   {
     "windwp/nvim-ts-autotag",
     event = "LazyFile",

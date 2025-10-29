@@ -1,4 +1,4 @@
--- Terminal Mappings
+-- 终端映射辅助函数
 local function term_nav(dir)
   ---@param self snacks.terminal
   return function(self)
@@ -10,7 +10,8 @@ end
 
 return {
 
-  -- Snacks utils
+  -- Snacks 工具集
+  -- 提供大文件处理、快速文件打开、终端等实用工具
   {
     "snacks.nvim",
     opts = {
@@ -37,9 +38,8 @@ return {
     },
   },
 
-  -- Session management. This saves your session in the background,
-  -- keeping track of open buffers, window arrangement, and more.
-  -- You can restore sessions when returning through the dashboard.
+  -- 会话管理
+  -- 在后台自动保存会话，记录打开的缓冲区、窗口布局等，方便恢复工作环境
   {
     "folke/persistence.nvim",
     event = "BufReadPre",
@@ -53,6 +53,7 @@ return {
     },
   },
 
-  -- library used by other plugins
+  -- 通用库
+  -- 提供异步操作、文件系统等基础功能，被许多插件依赖
   { "nvim-lua/plenary.nvim", lazy = true },
 }

@@ -1,22 +1,21 @@
 return {
-  -- Asynchronously calls language-specific linter tools and reports
-  -- their results via the `vim.diagnostic` module.
+  -- 代码检查工具
+  -- 异步调用各种语言特定的代码检查工具，通过 vim.diagnostic 模块报告问题
   {
     "mfussenegger/nvim-lint",
     event = "LazyFile",
     opts = {
-      -- Event to trigger linters
+      -- 触发代码检查的事件
       events = { "BufWritePost", "BufReadPost", "InsertLeave" },
       linters_by_ft = {
         fish = { "fish" },
-        -- Use the "*" filetype to run linters on all filetypes.
+        -- 使用 "*" 文件类型可在所有文件类型上运行检查器
         -- ['*'] = { 'global linter' },
-        -- Use the "_" filetype to run linters on filetypes that don't have other linters configured.
+        -- 使用 "_" 文件类型可在没有配置其他检查器的文件类型上运行
         -- ['_'] = { 'fallback linter' },
         -- ["*"] = { "typos" },
       },
-      -- LazyVim extension to easily override linter options
-      -- or add custom linters.
+      -- LazyVim 扩展，用于轻松覆盖检查器选项或添加自定义检查器
       ---@type table<string,table>
       linters = {
         -- -- Example of using selene only when a selene.toml file is present
@@ -58,24 +57,24 @@ return {
       end
 
       function M.lint()
-        -- Use nvim-lint's logic first:
-        -- * checks if linters exist for the full filetype first
-        -- * otherwise will split filetype by "." and add all those linters
-        -- * this differs from conform.nvim which only uses the first filetype that has a formatter
+        -- 首先使用 nvim-lint 的逻辑：
+        -- * 先检查完整文件类型是否存在检查器
+        -- * 否则将按 "." 分割文件类型并添加所有这些检查器
+        -- * 这与 conform.nvim 的行为不同，后者只使用第一个有格式化器的文件类型
         local names = lint._resolve_linter_by_ft(vim.bo.filetype)
 
-        -- Create a copy of the names table to avoid modifying the original.
+        -- 创建 names 表的副本以避免修改原始表
         names = vim.list_extend({}, names)
 
-        -- Add fallback linters.
+        -- 添加后备检查器
         if #names == 0 then
           vim.list_extend(names, lint.linters_by_ft["_"] or {})
         end
 
-        -- Add global linters.
+        -- 添加全局检查器
         vim.list_extend(names, lint.linters_by_ft["*"] or {})
 
-        -- Filter out linters that don't exist or don't match the condition.
+        -- 过滤掉不存在或不匹配条件的检查器
         local ctx = { filename = vim.api.nvim_buf_get_name(0) }
         ctx.dirname = vim.fn.fnamemodify(ctx.filename, ":h")
         names = vim.tbl_filter(function(name)
@@ -86,7 +85,7 @@ return {
           return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
         end, names)
 
-        -- Run linters.
+        -- 运行检查器
         if #names > 0 then
           lint.try_lint(names)
         end

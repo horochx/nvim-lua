@@ -1,4 +1,4 @@
--- Some extras need to be loaded before others
+-- 某些扩展需要在其他扩展之前加载，这里定义加载优先级
 local prios = {
   ["plugins.extras.test.core"] = 1,
   ["plugins.extras.dap.core"] = 1,
@@ -28,7 +28,7 @@ local defaults = LazyVim.config.get_defaults()
 local changed = false
 local updated = {} ---@type string[]
 
--- Add extras from LazyExtras that are not disabled
+-- 从 LazyExtras 添加未被禁用的扩展
 for _, extra in ipairs(LazyVim.config.json.data.extras) do
   if LazyVim.plugin.renamed_extras[extra] then
     extra = LazyVim.plugin.renamed_extras[extra]
@@ -50,7 +50,7 @@ if changed then
   LazyVim.json.save()
 end
 
--- Add default extras
+-- 添加默认扩展
 for name, extra in pairs(defaults) do
   if extra.enabled then
     prios[name] = prios[name] or 20
@@ -66,6 +66,7 @@ if vim.g.vscode then
   table.insert(extras, 1, "plugins.extras.vscode")
 end
 
+-- 按优先级排序扩展
 table.sort(extras, function(a, b)
   local pa = prios[a] or 50
   local pb = prios[b] or 50
@@ -76,6 +77,7 @@ table.sort(extras, function(a, b)
 end)
 
 ---@param extra string
+-- 将所有扩展映射为可导入的格式
 return vim.tbl_map(function(extra)
   return { import = extra }
 end, extras)

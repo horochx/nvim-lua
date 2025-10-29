@@ -18,6 +18,8 @@ function M.setup(_, opts)
 end
 
 return {
+  -- 代码格式化工具
+  -- 统一管理各种语言的代码格式化器，保持代码风格一致
   {
     "stevearc/conform.nvim",
     dependencies = { "mason.nvim" },
@@ -34,7 +36,8 @@ return {
       },
     },
     init = function()
-      -- Install the conform formatter on VeryLazy
+      -- 在 VeryLazy 事件时安装 conform 格式化器
+      -- 注册为 LazyVim 的主要格式化工具，以便在保存时自动格式化
       LazyVim.on_very_lazy(function()
         LazyVim.format.register({
           name = "conform.nvim",
@@ -75,8 +78,7 @@ return {
           fish = { "fish_indent" },
           sh = { "shfmt" },
         },
-        -- The options you set here will be merged with the builtin formatters.
-        -- You can also define any custom formatters here.
+        -- 这里可以合并内置格式化器的配置或定义自定义格式化器
         ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
         formatters = {
           injected = { options = { ignore_errors = true } },

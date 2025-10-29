@@ -1,6 +1,6 @@
 return {
-  -- This is what powers LazyVim's fancy-looking
-  -- tabs, which include filetype icons and close buttons.
+  -- 标签页增强
+  -- 提供美观的缓冲区标签页，包含文件类型图标和关闭按钮
   {
     "akinsho/bufferline.nvim",
     event = "VeryLazy",
@@ -49,7 +49,7 @@ return {
     },
     config = function(_, opts)
       require("bufferline").setup(opts)
-      -- Fix bufferline when restoring a session
+      -- 恢复会话时修复 bufferline 显示
       vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
         callback = function()
           vim.schedule(function()
@@ -60,23 +60,23 @@ return {
     end,
   },
 
-  -- Displays a fancy status line with git status,
-  -- LSP diagnostics, filetype information, and more.
+  -- 美化状态栏
+  -- 显示 Git 状态、LSP 诊断、文件类型等信息
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
       if vim.fn.argc(-1) > 0 then
-        -- set an empty statusline till lualine loads
+        -- 在 lualine 加载前设置空状态栏
         vim.o.statusline = " "
       else
-        -- hide the statusline on the starter page
+        -- 在启动页隐藏状态栏
         vim.o.laststatus = 0
       end
     end,
     opts = function()
-      -- PERF: we don't need this lualine require madness 🤷
+      -- PERF: 不需要 lualine 的这些疯狂依赖 🤷
       local lualine_require = require("lualine_require")
       lualine_require.require = require
 
@@ -166,8 +166,8 @@ return {
         extensions = { "neo-tree", "lazy", "fzf" },
       }
 
-      -- do not add trouble symbols if aerial is enabled
-      -- And allow it to be overriden for some buffer types (see autocmds)
+      -- 如果启用了 aerial，则不添加 trouble 符号
+      -- 允许某些缓冲区类型覆盖此设置（参见 autocmds）
       if vim.g.trouble_lualine and LazyVim.has("trouble.nvim") then
         local trouble = require("trouble")
         local symbols = trouble.statusline({
@@ -190,7 +190,8 @@ return {
     end,
   },
 
-  -- Highly experimental plugin that completely replaces the UI for messages, cmdline and the popupmenu.
+  -- 增强的 UI 组件
+  -- 完全替换消息、命令行和弹出菜单的 UI，提供更现代的交互体验
   {
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -234,9 +235,8 @@ return {
       { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, desc = "Scroll Backward", mode = {"i", "n", "s"}},
     },
     config = function(_, opts)
-      -- HACK: noice shows messages from before it was enabled,
-      -- but this is not ideal when Lazy is installing plugins,
-      -- so clear the messages in this case.
+      -- HACK: noice 会显示启用前的消息
+      -- 但在 Lazy 安装插件时这不理想，所以在这种情况下清除消息
       if vim.o.filetype == "lazy" then
         vim.cmd([[messages clear]])
       end
@@ -244,7 +244,8 @@ return {
     end,
   },
 
-  -- icons
+  -- 图标库
+  -- 为文件和文件类型提供图标支持
   {
     "nvim-mini/mini.icons",
     lazy = true,
@@ -265,9 +266,12 @@ return {
     end,
   },
 
-  -- ui components
+  -- UI 组件库
+  -- 提供可复用的 UI 组件，供其他插件使用
   { "MunifTanjim/nui.nvim", lazy = true },
 
+  -- Snacks 核心功能扩展
+  -- 提供缩进线、输入框、通知、滚动等 UI 增强功能
   {
     "snacks.nvim",
     opts = {
@@ -303,11 +307,11 @@ return {
           end,
           header = [[
           ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-          ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-          ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-          ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
-          ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
-          ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
+          ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z
+          ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z
+          ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z
+          ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
+          ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝
    ]],
           -- stylua: ignore
           ---@type snacks.dashboard.Item[]

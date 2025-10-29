@@ -12,7 +12,11 @@ end
 require("config").init()
 
 return {
+  -- 插件管理器
+  -- 用于管理所有 Neovim 插件的加载和更新
   { "folke/lazy.nvim", version = "*" },
+  -- 核心工具集
+  -- 提供通知、终端、大文件处理等基础功能，是 LazyVim 的核心依赖
   {
     "folke/snacks.nvim",
     priority = 1000,
@@ -21,8 +25,8 @@ return {
     config = function(_, opts)
       local notify = vim.notify
       require("snacks").setup(opts)
-      -- HACK: restore vim.notify after snacks setup and let noice.nvim take over
-      -- this is needed to have early notifications show up in noice history
+      -- HACK: 在 snacks 设置后恢复 vim.notify，让 noice.nvim 接管
+      -- 这是为了让早期通知能够显示在 noice 历史记录中
       if LazyVim.has("noice.nvim") then
         vim.notify = notify
       end

@@ -1,6 +1,7 @@
 return {
 
-  -- search/replace in multiple files
+  -- 多文件搜索替换工具
+  -- 支持在整个项目中进行复杂的搜索和替换操作，提高重构效率
   {
     "MagicDuck/grug-far.nvim",
     opts = { headerMaxWidth = 80 },
@@ -24,9 +25,8 @@ return {
     },
   },
 
-  -- Flash enhances the built-in search functionality by showing labels
-  -- at the end of each match, letting you quickly jump to a specific
-  -- location.
+  -- 快速跳转插件
+  -- 通过在每个匹配位置显示标签，让你能够快速跳转到屏幕上的任意位置
   {
     "folke/flash.nvim",
     event = "VeryLazy",
@@ -40,7 +40,7 @@ return {
       { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
       { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
       { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-      -- Simulate nvim-treesitter incremental selection
+      -- 模拟 nvim-treesitter 增量选择
       { "<c-space>", mode = { "n", "o", "x" },
         function()
           require("flash").treesitter({
@@ -48,13 +48,13 @@ return {
               ["<c-space>"] = "next",
               ["<BS>"] = "prev"
             }
-          }) 
+          })
         end, desc = "Treesitter Incremental Selection" },
     },
   },
 
-  -- which-key helps you remember key bindings by showing a popup
-  -- with the active keybindings of the command you started typing.
+  -- 快捷键提示面板
+  -- 在你输入命令时显示可用的快捷键，帮助记忆和发现功能
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -127,9 +127,8 @@ return {
     end,
   },
 
-  -- git signs highlights text that has changed since the list
-  -- git commit, and also lets you interactively stage & unstage
-  -- hunks in a commit.
+  -- Git 变更标记
+  -- 在行号旁显示 Git 变更状态，并提供交互式的暂存和重置功能
   {
     "lewis6991/gitsigns.nvim",
     event = "LazyFile",
@@ -202,7 +201,8 @@ return {
     end,
   },
 
-  -- better diagnostics list and others
+  -- 诊断列表增强
+  -- 提供更好的诊断信息展示，让错误和警告更容易查看和导航
   {
     "folke/trouble.nvim",
     cmd = { "Trouble" },
@@ -251,8 +251,8 @@ return {
     },
   },
 
-  -- Finds and lists all of the TODO, HACK, BUG, etc comment
-  -- in your project and loads them into a browsable list.
+  -- TODO 注释管理
+  -- 查找并列出项目中所有的 TODO、HACK、BUG 等标记注释，便于管理待办事项
   {
     "folke/todo-comments.nvim",
     cmd = { "TodoTrouble", "TodoTelescope" },
