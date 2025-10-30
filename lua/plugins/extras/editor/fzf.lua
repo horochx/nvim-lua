@@ -1,6 +1,7 @@
+-- FZF：强大的模糊查找工具，Telescope 的替代品
+-- 使用 Rust 编写，性能更好，特别适合大型项目
 if lazyvim_docs then
-  -- In case you don't want to use `:LazyExtras`,
-  -- then you need to set the option below.
+  -- 如果不想使用 :LazyExtras，需要设置此选项
   vim.g.lazyvim_picker = "fzf"
 end
 
@@ -40,6 +41,8 @@ end
 
 return {
   desc = "Awesome picker for FZF (alternative to Telescope)",
+  -- fzf-lua：FZF 的 Lua 封装，提供快速的文件和文本搜索
+  -- 比 Telescope 启动更快，占用内存更少，适合大型代码库
   {
     "ibhagwan/fzf-lua",
     cmd = "FzfLua",
@@ -48,7 +51,7 @@ return {
       local config = fzf.config
       local actions = fzf.actions
 
-      -- Quickfix
+      -- Quickfix 和快捷键配置
       config.defaults.keymap.fzf["ctrl-q"] = "select-all+accept"
       config.defaults.keymap.fzf["ctrl-u"] = "half-page-up"
       config.defaults.keymap.fzf["ctrl-d"] = "half-page-down"

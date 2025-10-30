@@ -1,3 +1,5 @@
+-- Harpoon：快速标记和跳转常用文件
+-- 用数字键快速访问标记的文件，比缓冲区列表更高效
 return {
   "ThePrimeagen/harpoon",
   branch = "harpoon2",

@@ -1,3 +1,4 @@
+-- Neotest：统一的测试框架接口，支持多种语言的测试适配器
 return {
   recommended = true,
   desc = "Neotest support. Requires language specific adapters to be configured. (see lang extras)",
@@ -5,22 +6,15 @@ return {
     "nvim-neotest/neotest",
     dependencies = { "nvim-neotest/nvim-nio" },
     opts = {
-      -- Can be a list of adapters like what neotest expects,
-      -- or a list of adapter names,
-      -- or a table of adapter names, mapped to adapter configs.
-      -- The adapter will then be automatically loaded with the config.
+      -- 配置语言特定的测试适配器
       adapters = {},
-      -- Example for loading neotest-golang with a custom config
-      -- adapters = {
-      --   ["neotest-golang"] = {
-      --     go_test_args = { "-v", "-race", "-count=1", "-timeout=60s" },
-      --     dap_go_enabled = true,
-      --   },
-      -- },
+      -- 在代码中显示测试状态
       status = { virtual_text = true },
+      -- 运行后自动打开输出
       output = { open_on_run = true },
       quickfix = {
         open = function()
+          -- 优先使用 trouble.nvim 显示测试结果
           if LazyVim.has("trouble.nvim") then
             require("trouble").open({ mode = "quickfix", focus = false })
           else
@@ -34,7 +28,7 @@ return {
       vim.diagnostic.config({
         virtual_text = {
           format = function(diagnostic)
-            -- Replace newline and tab characters with space for more compact diagnostics
+            -- 压缩诊断消息以节省空间
             local message = diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
             return message
           end,
@@ -43,7 +37,6 @@ return {
 
       if LazyVim.has("trouble.nvim") then
         opts.consumers = opts.consumers or {}
-        -- Refresh and auto close trouble after running tests
         ---@type neotest.Consumer
         opts.consumers.trouble = function(client)
           client.listeners.results = function(adapter_id, results, partial)
@@ -62,6 +55,7 @@ return {
               local trouble = require("trouble")
               if trouble.is_open() then
                 trouble.refresh()
+                -- 所有测试通过时自动关闭
                 if failed == 0 then
                   trouble.close()
                 end
@@ -84,6 +78,7 @@ return {
             local adapter = require(name)
             if type(config) == "table" and not vim.tbl_isempty(config) then
               local meta = getmetatable(adapter)
+              -- 根据适配器类型调用相应的设置方法
               if adapter.setup then
                 adapter.setup(config)
               elseif adapter.adapter then

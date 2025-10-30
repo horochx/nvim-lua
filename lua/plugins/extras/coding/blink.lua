@@ -1,8 +1,7 @@
 ---@diagnostic disable: missing-fields
+-- blink.cmp：用 Rust 编写的高性能补全引擎，比 nvim-cmp 更快
 if lazyvim_docs then
-  -- set to `true` to follow the main branch
-  -- you need to have a working rust toolchain to build the plugin
-  -- in this case.
+  -- 设为 true 跟随主分支开发（需要 Rust 工具链编译）
   vim.g.lazyvim_blink_main = false
 end
 
@@ -10,6 +9,7 @@ return {
   {
     "hrsh7th/nvim-cmp",
     optional = true,
+    -- 启用 blink 时禁用 nvim-cmp
     enabled = false,
   },
   {
@@ -23,10 +23,10 @@ return {
     },
     dependencies = {
       "rafamadriz/friendly-snippets",
-      -- add blink.compat to dependencies
       {
         "saghen/blink.compat",
-        optional = true, -- make optional so it's only enabled if any extras need it
+        -- 可选依赖，仅在需要兼容 nvim-cmp 源时启用
+        optional = true,
         opts = {},
         version = not vim.g.lazyvim_blink_main and "*",
       },
@@ -41,42 +41,38 @@ return {
       },
 
       appearance = {
-        -- sets the fallback highlight groups to nvim-cmp's highlight groups
-        -- useful for when your theme doesn't support blink.cmp
-        -- will be removed in a future release, assuming themes add support
+        -- 主题未支持时回退到 nvim-cmp 高亮组
         use_nvim_cmp_as_default = false,
-        -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-        -- adjusts spacing to ensure icons are aligned
+        -- mono 用于等宽图标字体，确保对齐
         nerd_font_variant = "mono",
       },
 
       completion = {
         accept = {
-          -- experimental auto-brackets support
+          -- 实验性自动括号功能
           auto_brackets = {
             enabled = true,
           },
         },
         menu = {
           draw = {
+            -- 为 LSP 项使用 treesitter 高亮
             treesitter = { "lsp" },
           },
         },
         documentation = {
           auto_show = true,
+          -- 延迟显示文档以避免频繁弹出
           auto_show_delay_ms = 200,
         },
         ghost_text = {
+          -- 仅在 AI 补全模式下启用幽灵文本
           enabled = vim.g.ai_cmp,
         },
       },
 
-      -- experimental signature help support
-      -- signature = { enabled = true },
-
       sources = {
-        -- adding any nvim-cmp sources here will enable them
-        -- with blink.compat
+        -- 通过 blink.compat 支持 nvim-cmp 源
         compat = {},
         default = { "lsp", "path", "snippets", "buffer" },
       },
@@ -85,12 +81,14 @@ return {
         enabled = true,
         keymap = {
           preset = "cmdline",
+          -- 禁用左右箭头避免干扰命令行编辑
           ["<Right>"] = false,
           ["<Left>"] = false,
         },
         completion = {
           list = { selection = { preselect = false } },
           menu = {
+            -- 仅在命令模式下自动显示
             auto_show = function(ctx)
               return vim.fn.getcmdtype() == ":"
             end,
@@ -109,7 +107,7 @@ return {
       if opts.snippets and opts.snippets.preset == "default" then
         opts.snippets.expand = LazyVim.cmp.expand
       end
-      -- setup compat sources
+      -- 设置兼容源以支持 nvim-cmp 插件
       local enabled = opts.sources.default
       for _, source in ipairs(opts.sources.compat or {}) do
         opts.sources.providers[source] = vim.tbl_deep_extend(
@@ -122,15 +120,15 @@ return {
         end
       end
 
-      -- add ai_accept to <Tab> key
+      -- 添加 AI 接受功能到 Tab 键
       if not opts.keymap["<Tab>"] then
-        if opts.keymap.preset == "super-tab" then -- super-tab
+        if opts.keymap.preset == "super-tab" then
           opts.keymap["<Tab>"] = {
             require("blink.cmp.keymap.presets").get("super-tab")["<Tab>"][1],
             LazyVim.cmp.map({ "snippet_forward", "ai_nes", "ai_accept" }),
             "fallback",
           }
-        else -- other presets
+        else
           opts.keymap["<Tab>"] = {
             LazyVim.cmp.map({ "snippet_forward", "ai_nes", "ai_accept" }),
             "fallback",
@@ -138,10 +136,10 @@ return {
         end
       end
 
-      -- Unset custom prop to pass blink.cmp validation
+      -- 移除自定义属性以通过验证
       opts.sources.compat = nil
 
-      -- check if we need to override symbol kinds
+      -- 为自定义补全源注册图标类型
       for _, provider in pairs(opts.sources.providers or {}) do
         ---@cast provider blink.cmp.SourceProviderConfig|{kind?:string}
         if provider.kind then
@@ -165,7 +163,6 @@ return {
             return items
           end
 
-          -- Unset custom prop to pass blink.cmp validation
           provider.kind = nil
         end
       end
@@ -174,7 +171,7 @@ return {
     end,
   },
 
-  -- add icons
+  -- 添加图标配置
   {
     "saghen/blink.cmp",
     opts = function(_, opts)
@@ -183,7 +180,7 @@ return {
     end,
   },
 
-  -- lazydev
+  -- 集成 lazydev 以提供 Neovim Lua API 补全
   {
     "saghen/blink.cmp",
     opts = {
@@ -195,13 +192,14 @@ return {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
-            score_offset = 100, -- show at a higher priority than lsp
+            -- 高优先级显示 Lua API
+            score_offset = 100,
           },
         },
       },
     },
   },
-  -- catppuccin support
+  -- Catppuccin 主题集成
   {
     "catppuccin",
     optional = true,

@@ -1,3 +1,4 @@
+-- Chezmoi：管理 dotfiles 的工具集成，在 Neovim 中编辑 chezmoi 管理的配置文件
 local pick_chezmoi = function()
   if LazyVim.pick.picker.name == "telescope" then
     require("telescope").extensions.chezmoi.find_files()

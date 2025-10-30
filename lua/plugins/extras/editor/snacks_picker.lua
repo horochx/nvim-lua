@@ -1,6 +1,6 @@
+-- Snacks Picker：快速且现代的文件选择器
 if lazyvim_docs then
-  -- In case you don't want to use `:LazyExtras`,
-  -- then you need to set the option below.
+  -- 如果不想使用 :LazyExtras，需要设置此选项
   vim.g.lazyvim_picker = "snacks"
 end
 
@@ -28,6 +28,8 @@ end
 return {
   desc = "Fast and modern file picker",
   recommended = true,
+  -- Snacks Picker：集成在 Snacks 中的现代化文件选择器
+  -- 比 Telescope 更快，比 FZF 更简洁，是 LazyVim 的推荐选择
   {
     "folke/snacks.nvim",
     opts = {

@@ -1,7 +1,7 @@
+-- nvim-navic：在状态栏显示当前代码位置（函数、类等）
 return {
-  -- lsp symbol navigation for lualine. This shows where
-  -- in the code structure you are - within functions, classes,
-  -- etc - in the statusline.
+  -- nvim-navic：显示当前光标在代码结构中的位置
+  -- 在状态栏展示面包屑导航，快速了解当前上下文
   {
     "SmiteshP/nvim-navic",
     lazy = true,
@@ -22,7 +22,7 @@ return {
     end,
   },
 
-  -- lualine integration
+  -- lualine 集成：在状态栏显示 navic 信息
   {
     "nvim-lualine/lualine.nvim",
     optional = true,

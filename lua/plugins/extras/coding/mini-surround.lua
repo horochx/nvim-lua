@@ -1,11 +1,8 @@
--- Fast and feature-rich surround actions. For text that includes
--- surrounding characters like brackets or quotes, this allows you
--- to select the text inside, change or modify the surrounding characters,
--- and more.
+-- mini.surround：快速操作配对符号（括号、引号等），提供添加、删除、替换等功能
 return {
   "nvim-mini/mini.surround",
   keys = function(_, keys)
-    -- Populate the keys based on the user's options
+    -- 根据用户配置动态生成快捷键描述
     local opts = LazyVim.opts("mini.surround")
     local mappings = {
       { opts.mappings.add, desc = "Add Surrounding", mode = { "n", "x" } },
@@ -23,13 +20,13 @@ return {
   end,
   opts = {
     mappings = {
-      add = "gsa", -- Add surrounding in Normal and Visual modes
-      delete = "gsd", -- Delete surrounding
-      find = "gsf", -- Find surrounding (to the right)
-      find_left = "gsF", -- Find surrounding (to the left)
-      highlight = "gsh", -- Highlight surrounding
-      replace = "gsr", -- Replace surrounding
-      update_n_lines = "gsn", -- Update `n_lines`
+      add = "gsa",
+      delete = "gsd",
+      find = "gsf",
+      find_left = "gsF",
+      highlight = "gsh",
+      replace = "gsr",
+      update_n_lines = "gsn",
     },
   },
 }

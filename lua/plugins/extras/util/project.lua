@@ -1,3 +1,4 @@
+-- project.nvim：项目管理，快速切换项目和查找项目文件
 local pick = nil
 
 pick = function()

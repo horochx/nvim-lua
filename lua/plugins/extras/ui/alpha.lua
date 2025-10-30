@@ -1,8 +1,10 @@
 return {
 
+  -- 禁用 Snacks 的 dashboard 以避免冲突
   { "folke/snacks.nvim", opts = { dashboard = { enabled = false } } },
-  -- Dashboard. This runs when neovim starts, and is what displays
-  -- the "LAZYVIM" banner.
+
+  -- Alpha：Neovim 启动画面，展示 LazyVim 横幅和快捷操作菜单
+  -- 提供美观的启动界面，方便快速访问常用功能（查找文件、打开配置等）
   {
     "goolord/alpha-nvim",
     event = "VimEnter",
@@ -12,9 +14,9 @@ return {
       local dashboard = require("alpha.themes.dashboard")
       local logo = [[
            ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-           ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-           ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-           ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
+           ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z
+           ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z
+           ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z
            ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
            ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝
       ]]
@@ -43,7 +45,7 @@ return {
       return dashboard
     end,
     config = function(_, dashboard)
-      -- close Lazy and re-open when the dashboard is ready
+      -- 在 Lazy 窗口打开时先关闭它，待 dashboard 准备好后再重新打开
       if vim.o.filetype == "lazy" then
         vim.cmd.close()
         vim.api.nvim_create_autocmd("User", {

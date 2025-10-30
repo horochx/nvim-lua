@@ -1,6 +1,7 @@
 ---@diagnostic disable: missing-fields
+-- 使用 Neovim 0.12+ 原生内联补全功能集成 Copilot，提供更流畅的体验
 if lazyvim_docs then
-  -- Native inline completions don't support being shown as regular completions
+  -- 原生内联补全不支持作为常规补全源
   vim.g.ai_cmp = false
 end
 
@@ -9,6 +10,7 @@ if LazyVim.has_extra("ai.copilot-native") then
     LazyVim.error("You need Neovim >= 0.12 to use the `ai.copilot-native` extra.")
     return {}
   end
+  -- 避免与 copilot.lua 插件冲突
   if LazyVim.has_extra("ai.copilot") then
     LazyVim.error("Please disable the `ai.copilot` extra if you want to use `ai.copilot-native`")
     return {}
@@ -20,7 +22,6 @@ local status = {} ---@type table<number, "ok" | "error" | "pending">
 
 return {
   desc = "Native Copilot LSP integration. Requires Neovim >= 0.12",
-  -- copilot-language-server
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -45,14 +46,16 @@ return {
       },
       setup = {
         copilot = function()
+          -- 延迟启用以确保 LSP 完全初始化
           vim.schedule(function()
             vim.lsp.inline_completion.enable()
           end)
-          -- Accept inline suggestions or next edits
+          -- 注册接受动作以支持统一的快捷键
           LazyVim.cmp.actions.ai_accept = function()
             return vim.lsp.inline_completion.get()
           end
 
+          -- 仅在未启用 Sidekick 时配置状态处理器
           if not LazyVim.has_extra("ai.sidekick") then
             vim.lsp.config("copilot", {
               handlers = {
@@ -73,12 +76,13 @@ return {
     },
   },
 
-  -- lualine
+  -- 显示 Copilot 状态以便监控服务可用性
   {
     "nvim-lualine/lualine.nvim",
     optional = true,
     event = "VeryLazy",
     opts = function(_, opts)
+      -- Sidekick 已处理状态显示
       if LazyVim.has_extra("ai.sidekick") then
         return
       end

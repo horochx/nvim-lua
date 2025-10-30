@@ -1,16 +1,21 @@
+-- Dashboard：另一个启动画面插件，提供 doom 主题风格的界面
 return {
+  -- 禁用 Snacks 的 dashboard
   { "folke/snacks.nvim", opts = { dashboard = { enabled = false } } },
+
+  -- Dashboard.nvim：启动画面插件，展示 LazyVim 横幅、快捷操作和启动时间
+  -- 不使用懒加载以正确处理 stdin 输入（避免从管道读取时出错）
   {
     "nvimdev/dashboard-nvim",
-    lazy = false, -- As https://github.com/nvimdev/dashboard-nvim/pull/450, dashboard-nvim shouldn't be lazy-loaded to properly handle stdin.
+    lazy = false,
     opts = function()
       local logo = [[
            ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-           ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-           ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-           ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
-           ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
-           ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
+           ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z
+           ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z
+           ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z
+           ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║
+           ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝
       ]]
 
       logo = string.rep("\n", 8) .. logo .. "\n\n"
@@ -49,7 +54,7 @@ return {
         button.key_format = "  %s"
       end
 
-      -- open dashboard after closing lazy
+      -- 在关闭 Lazy 窗口后重新打开 dashboard
       if vim.o.filetype == "lazy" then
         vim.api.nvim_create_autocmd("WinClosed", {
           pattern = tostring(vim.api.nvim_get_current_win()),

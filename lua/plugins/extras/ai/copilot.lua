@@ -1,6 +1,6 @@
+-- GitHub Copilot 代码补全插件：提供 AI 驱动的代码建议，加速开发流程
 return {
   recommended = true,
-  -- copilot
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -8,15 +8,19 @@ return {
     event = "BufReadPost",
     opts = {
       suggestion = {
+        -- 使用独立的补全引擎时禁用内联建议，避免与 nvim-cmp/blink.cmp 冲突
         enabled = not vim.g.ai_cmp,
         auto_trigger = true,
+        -- 在补全菜单显示时隐藏建议，防止界面混乱
         hide_during_completion = vim.g.ai_cmp,
         keymap = {
-          accept = false, -- handled by nvim-cmp / blink.cmp
+          -- 由补全插件统一处理接受操作，保持一致的用户体验
+          accept = false,
           next = "<M-]>",
           prev = "<M-[>",
         },
       },
+      -- 禁用面板以简化界面，主要通过内联建议使用
       panel = { enabled = false },
       filetypes = {
         markdown = true,
@@ -25,18 +29,17 @@ return {
     },
   },
 
-  -- copilot-language-server
   {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        -- copilot.lua only works with its own copilot lsp server
+        -- copilot.lua 有自己的实现，不需要额外的 LSP 服务器
         copilot = { enabled = false },
       },
     },
   },
 
-  -- add ai_accept action
+  -- 注册 AI 接受动作以支持统一的补全接受快捷键
   {
     "zbirenbaum/copilot.lua",
     opts = function()
@@ -50,7 +53,7 @@ return {
     end,
   },
 
-  -- lualine
+  -- 在状态栏显示 Copilot 状态以便实时了解服务可用性
   {
     "nvim-lualine/lualine.nvim",
     optional = true,
@@ -70,21 +73,20 @@ return {
     end,
   },
 
+  -- 仅在启用补全插件时集成 Copilot 作为补全源
   vim.g.ai_cmp
       and {
-        -- copilot cmp source
         {
           "hrsh7th/nvim-cmp",
           optional = true,
-          dependencies = { -- this will only be evaluated if nvim-cmp is enabled
+          dependencies = {
             {
               "zbirenbaum/copilot-cmp",
               opts = {},
               config = function(_, opts)
                 local copilot_cmp = require("copilot_cmp")
                 copilot_cmp.setup(opts)
-                -- attach cmp source whenever copilot attaches
-                -- fixes lazy-loading issues with the copilot cmp source
+                -- 在 Copilot 附加时注册补全源，解决懒加载导致的源丢失问题
                 Snacks.util.lsp.on({ name = "copilot" }, function()
                   copilot_cmp._on_insert_enter({})
                 end)
@@ -95,6 +97,7 @@ return {
                   optional = true,
                   ---@param opts cmp.ConfigSchema
                   opts = function(_, opts)
+                    -- 将 Copilot 设为最高优先级源，优先显示 AI 建议
                     table.insert(opts.sources, 1, {
                       name = "copilot",
                       group_index = 1,
@@ -117,6 +120,7 @@ return {
                 copilot = {
                   name = "copilot",
                   module = "blink-copilot",
+                  -- 高分值确保 AI 建议排在前面
                   score_offset = 100,
                   async = true,
                 },

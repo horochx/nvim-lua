@@ -1,25 +1,23 @@
 ---@diagnostic disable: inject-field
+-- Biome：快速的 Web 项目格式化和 linting 工具，作为 Prettier + ESLint 的替代方案
 if lazyvim_docs then
-  -- Enable this option to avoid conflicts with Prettier.
+  -- 启用此选项以避免与 Prettier 冲突
   vim.g.lazyvim_prettier_needs_config = true
 end
 
--- https://biomejs.dev/internals/language-support/
+-- Biome 支持的文件类型列表
 local supported = {
   "astro",
   "css",
   "graphql",
-  -- "html",
   "javascript",
   "javascriptreact",
   "json",
   "jsonc",
-  -- "markdown",
   "svelte",
   "typescript",
   "typescriptreact",
   "vue",
-  -- "yaml",
 }
 
 return {
@@ -41,12 +39,12 @@ return {
 
       opts.formatters = opts.formatters or {}
       opts.formatters.biome = {
+        -- 仅在项目根目录有 biome 配置文件时启用
         require_cwd = true,
       }
     end,
   },
 
-  -- none-ls support
   {
     "nvimtools/none-ls.nvim",
     optional = true,

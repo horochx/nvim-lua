@@ -1,10 +1,12 @@
+-- Octo：GitHub 集成，在 Neovim 中查看和管理 Issues、Pull Requests
 return {
 
-  -- depends on the git extra for highlighting and auto-completion of github issues/prs
+  -- 依赖 git extra 以高亮和自动补全 GitHub issues/prs
   return {
   { import = "plugins.extras.lang.git" },
 
-  -- Octo
+  -- Octo：功能强大的 GitHub 客户端，提供完整的 Issue 和 PR 管理
+  -- 支持评论、标签、审查、合并等操作，无需离开编辑器
   {
     "pwntester/octo.nvim",
     cmd = "Octo",
@@ -38,7 +40,7 @@ return {
     },
   },
 
-  -- Octo Picker
+  -- Octo Picker：为 Octo 配置合适的 picker（telescope/fzf/snacks）
   {
     "pwntester/octo.nvim",
     opts = function(_, opts)

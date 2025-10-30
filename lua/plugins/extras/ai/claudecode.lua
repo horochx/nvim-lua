@@ -1,3 +1,4 @@
+-- ClaudeCode：集成 Claude AI 进行代码对话和编辑，提供智能重构建议
 return {
   "coder/claudecode.nvim",
   opts = {},
@@ -15,7 +16,6 @@ return {
       desc = "Add file",
       ft = { "NvimTree", "neo-tree", "oil" },
     },
-    -- Diff management
     { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
     { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
   },

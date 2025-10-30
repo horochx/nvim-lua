@@ -1,8 +1,10 @@
+-- Leap：快速跳转到屏幕上的任意位置
+-- 通过输入2个字符快速定位，比鼠标点击更高效
 return {
-  -- disable flash
+  -- 禁用 flash 以使用 leap
   { "folke/flash.nvim", enabled = false, optional = true },
 
-  -- easily jump to any location and enhanced f/t motions for Leap
+  -- flit：增强的 f/t 跳转，配合 Leap 使用
   {
     "ggandor/flit.nvim",
     enabled = true,
@@ -16,6 +18,8 @@ return {
     end,
     opts = { labeled_modes = "nx" },
   },
+  -- Leap：快速跳转插件，输入2个字符即可跳转到任意位置
+  -- 比传统的 w/b 导航更快，适合在可见区域内快速移动
   {
     "ggandor/leap.nvim",
     enabled = true,
@@ -35,7 +39,7 @@ return {
     end,
   },
 
-  -- rename surround mappings from gs to gz to prevent conflict with leap
+  -- 将 surround 快捷键从 gs 改为 gz，避免与 leap 冲突
   {
     "nvim-mini/mini.surround",
     optional = true,
@@ -55,6 +59,6 @@ return {
     },
   },
 
-  -- makes some plugins dot-repeatable like leap
+  -- vim-repeat：让 leap 等插件支持 . 命令重复操作
   { "tpope/vim-repeat", event = "VeryLazy" },
 }

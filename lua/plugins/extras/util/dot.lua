@@ -1,3 +1,4 @@
+-- Dotfiles：为常见的 dotfile 格式提供语言支持和语法高亮
 ---@type string
 local xdg_config = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. "/.config"
 
@@ -9,6 +10,8 @@ end
 return {
   recommended = true,
   desc = "Language support for dotfiles",
+  -- 为各种 dotfiles 配置 LSP 和语法高亮
+  -- 支持 bash, kitty, hyprland, rofi, waybar 等常见配置文件
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -21,7 +24,7 @@ return {
     "mason-org/mason.nvim",
     opts = { ensure_installed = { "shellcheck" } },
   },
-  -- add some stuff to treesitter
+  -- 为 dotfiles 添加 Treesitter 语法高亮
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)

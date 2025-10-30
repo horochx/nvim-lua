@@ -1,9 +1,11 @@
+-- TabNine：本地运行的 AI 代码补全，注重隐私保护
 return {
-  -- Tabnine cmp source
   {
     "tzachar/cmp-tabnine",
+    -- 根据操作系统选择安装脚本
     build = LazyVim.is_win() and "pwsh -noni .\\install.ps1" or "./install.sh",
     opts = {
+      -- 限制上下文行数以平衡性能和准确性
       max_lines = 1000,
       max_num_results = 3,
       sort = true,
@@ -13,6 +15,7 @@ return {
     end,
   },
 
+  -- 集成为高优先级补全源
   {
     "hrsh7th/nvim-cmp",
     optional = true,
@@ -25,8 +28,8 @@ return {
         priority = 100,
       })
 
+      -- 隐藏百分比以简化菜单显示
       opts.formatting.format = LazyVim.inject.args(opts.formatting.format, function(entry, item)
-        -- Hide percentage in the menu
         if entry.source.name == "cmp_tabnine" then
           item.menu = ""
         end
@@ -34,6 +37,7 @@ return {
     end,
   },
 
+  -- blink.cmp 通过兼容层支持 TabNine
   {
     "saghen/blink.cmp",
     optional = true,
@@ -52,7 +56,7 @@ return {
     },
   },
 
-  -- Show TabNine status in lualine
+  -- 状态栏显示 TabNine 状态
   {
     "nvim-lualine/lualine.nvim",
     optional = true,

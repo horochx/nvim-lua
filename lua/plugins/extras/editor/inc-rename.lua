@@ -1,6 +1,8 @@
+-- inc-rename：带实时预览的 LSP 重命名
 return {
 
-  -- Rename with cmdpreview
+  -- 增量重命名：使用 Neovim 的命令预览功能
+  -- 在重命名前实时预览所有更改，避免意外修改
   recommended = true,
   desc = "Incremental LSP renaming based on Neovim's command-preview feature",
   {
@@ -32,7 +34,7 @@ return {
     },
   },
 
-  --- Noice integration
+  -- Noice 集成：在命令行显示重命名预览
   {
     "folke/noice.nvim",
     optional = true,

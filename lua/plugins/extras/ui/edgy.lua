@@ -1,5 +1,7 @@
+-- Edgy：窗口布局管理器，将特定窗口（终端、测试、帮助等）固定在编辑器边缘
 return {
-  -- Create and display predefined window layouts.
+  -- Edgy：为 Neovim 创建预定义的窗口布局，将工具窗口固定在四周
+  -- 保持主编辑区域整洁，同时快速访问辅助窗口（如终端、测试结果、文件树等）
   {
     "folke/edgy.nvim",
     event = "VeryLazy",
@@ -36,7 +38,7 @@ return {
           {
             ft = "help",
             size = { height = 20 },
-            -- don't open help files in edgy that we're editing
+            -- 不在 edgy 中打开正在编辑的帮助文件（仅显示只读帮助）
             filter = function(buf)
               return vim.bo[buf].buftype == "help"
             end,
@@ -52,19 +54,19 @@ return {
           { title = "Grug Far", ft = "grug-far", size = { width = 0.4 } },
         },
         keys = {
-          -- increase width
+          -- 增加窗口宽度
           ["<c-Right>"] = function(win)
             win:resize("width", 2)
           end,
-          -- decrease width
+          -- 减小窗口宽度
           ["<c-Left>"] = function(win)
             win:resize("width", -2)
           end,
-          -- increase height
+          -- 增加窗口高度
           ["<c-Up>"] = function(win)
             win:resize("height", 2)
           end,
-          -- decrease height
+          -- 减小窗口高度
           ["<c-Down>"] = function(win)
             win:resize("height", -2)
           end,
@@ -95,7 +97,7 @@ return {
         end
       end
 
-      -- trouble
+      -- trouble 集成
       for _, pos in ipairs({ "top", "bottom", "left", "right" }) do
         opts[pos] = opts[pos] or {}
         table.insert(opts[pos], {

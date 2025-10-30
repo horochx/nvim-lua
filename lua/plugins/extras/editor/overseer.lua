@@ -1,4 +1,6 @@
+-- Overseer：任务运行器，管理和监控后台任务
 return {
+  -- Catppuccin 主题集成
   {
     "catppuccin",
     optional = true,
@@ -6,6 +8,8 @@ return {
       integrations = { overseer = true },
     },
   },
+  -- Overseer：强大的任务管理器，运行和监控构建、测试等任务
+  -- 提供任务列表、任务模板、任务历史等功能
   {
     "stevearc/overseer.nvim",
     cmd = {

@@ -1,3 +1,4 @@
+-- Black：Python 代码格式化工具，坚持统一的代码风格
 return {
   {
     "mason-org/mason.nvim",

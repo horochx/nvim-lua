@@ -1,3 +1,4 @@
+-- Refactoring：强大的代码重构工具
 local pick = function()
   local refactoring = require("refactoring")
   if LazyVim.pick.picker.name == "telescope" then
@@ -22,6 +23,8 @@ local pick = function()
 end
 
 return {
+  -- Refactoring.nvim：提供提取变量、提取函数、内联变量等重构操作
+  -- 基于 Treesitter，支持多种编程语言的智能重构
   {
     "ThePrimeagen/refactoring.nvim",
     event = { "BufReadPre", "BufNewFile" },

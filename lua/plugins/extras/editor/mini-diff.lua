@@ -1,11 +1,13 @@
+-- Mini.diff：Git 差异显示，gitsigns.nvim 的替代品
 return {
-  -- disable gitsigns.nvim
+  -- 禁用 gitsigns.nvim
   {
     "lewis6991/gitsigns.nvim",
     enabled = false,
   },
 
-  -- setup mini.diff
+  -- Mini.diff：在行号旁显示 Git 差异标记
+  -- 比 gitsigns 更轻量，与 mini.nvim 生态集成更好
   {
     "nvim-mini/mini.diff",
     event = "VeryLazy",
@@ -44,7 +46,7 @@ return {
           else
             require("mini.diff").disable(0)
           end
-          -- HACK: redraw to update the signs
+          -- 延迟重绘以更新符号显示
           vim.defer_fn(function()
             vim.cmd([[redraw!]])
           end, 200)
@@ -53,7 +55,7 @@ return {
     end,
   },
 
-  -- lualine integration
+  -- lualine 集成：在状态栏显示 Git 差异统计
   {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)

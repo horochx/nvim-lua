@@ -1,10 +1,11 @@
--- Automatically highlights other instances of the word under your cursor.
--- This works with LSP, Treesitter, and regexp matching to find the other
--- instances.
+-- Illuminate：自动高亮光标下单词的其他出现位置
+-- 使用 LSP、Treesitter 或正则匹配，帮助快速识别变量引用
 return {
-  -- disable snacks words
+  -- 禁用 snacks words 以避免冲突
   { "snacks.nvim", opts = { words = { enabled = false } } },
 
+  -- Illuminate：高亮光标下单词的所有引用
+  -- 帮助快速理解变量的作用域和使用位置
   {
     "RRethy/vim-illuminate",
     event = "LazyFile",
@@ -42,7 +43,7 @@ return {
       map("]]", "next")
       map("[[", "prev")
 
-      -- also set it after loading ftplugins, since a lot overwrite [[ and ]]
+      -- 在加载 ftplugins 后重新设置，因为很多会覆盖 [[ 和 ]]
       vim.api.nvim_create_autocmd("FileType", {
         callback = function()
           local buffer = vim.api.nvim_get_current_buf()

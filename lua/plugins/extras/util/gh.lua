@@ -1,12 +1,14 @@
+-- gh.nvim：GitHub 集成，在 Neovim 中管理 Issues、Pull Requests、Commits
 return {
 
-  -- depends on the git extra for highlighting and auto-completion of github issues/prs
+  -- 依赖 git extra 以高亮和自动补全 GitHub issues/prs
   return {
   { import = "plugins.extras.lang.git" },
 
   { "ldelossa/litee.nvim", lazy = true },
 
-  -- gh.nvim
+  -- gh.nvim：GitHub 客户端，直接在编辑器中查看和管理 GitHub 内容
+  -- 提供完整的 GitHub 工作流，包括 PR review、issue 管理、commit 浏览等
   {
     "ldelossa/gh.nvim",
     opts = {},

@@ -1,9 +1,12 @@
+-- Mini.hipatterns：高亮代码中的特殊模式，如颜色代码、Tailwind CSS 类名
 local M = {}
 
 ---@type table<string,true>
 M.hl = {}
 
 M.plugin = {
+  -- Mini.hipatterns：在代码中直接显示颜色预览，支持 Tailwind CSS
+  -- 让你立即看到 #RRGGBB 颜色和 Tailwind 类名的实际颜色效果
   "nvim-mini/mini.hipatterns",
   recommended = true,
   desc = "Highlight colors in your code. Also includes Tailwind CSS support.",
@@ -11,7 +14,7 @@ M.plugin = {
   opts = function()
     local hi = require("mini.hipatterns")
     return {
-      -- custom LazyVim option to enable the tailwind integration
+      -- LazyVim 自定义选项：启用 Tailwind 集成
       tailwind = {
         enabled = true,
         ft = {

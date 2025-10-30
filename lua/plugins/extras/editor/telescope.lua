@@ -1,6 +1,6 @@
+-- Telescope：强大的模糊查找器
 if lazyvim_docs then
-  -- In case you don't want to use `:LazyExtras`,
-  -- then you need to set the option below.
+  -- 如果不想使用 :LazyExtras，需要设置此选项
   vim.g.lazyvim_picker = "telescope"
 end
 
@@ -54,10 +54,9 @@ if not LazyVim.pick.register(picker) then
 end
 
 return {
-  -- Fuzzy finder.
-  -- The default key bindings to find files will use Telescope's
-  -- `find_files` or `git_files` depending on whether the
-  -- directory is a git repo.
+  -- Telescope：功能最丰富的模糊查找器
+  -- 提供文件搜索、文本搜索、Git 集成、LSP 符号等功能
+  -- 默认的文件搜索会根据是否为 Git 仓库选择 git_files 或 find_files
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope",

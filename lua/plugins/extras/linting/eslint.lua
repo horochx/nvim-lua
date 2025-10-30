@@ -1,5 +1,6 @@
+-- ESLint：JavaScript/TypeScript 代码检查工具，强制代码质量和风格规范
 if lazyvim_docs then
-  -- Set to false to disable auto format
+  -- 设为 false 可禁用自动格式化
   vim.g.lazyvim_eslint_auto_format = true
 end
 
@@ -8,13 +9,12 @@ local auto_format = vim.g.lazyvim_eslint_auto_format == nil or vim.g.lazyvim_esl
 return {
   {
     "neovim/nvim-lspconfig",
-    -- other settings removed for brevity
     opts = {
       ---@type table<string, vim.lsp.Config>
       servers = {
         eslint = {
           settings = {
-            -- helps eslint find the eslintrc when it's placed in a subfolder instead of the cwd root
+            -- 自动查找工作目录中的 eslintrc，支持 monorepo 结构
             workingDirectories = { mode = "auto" },
             format = auto_format,
           },
@@ -26,6 +26,7 @@ return {
             return
           end
 
+          -- 注册为次要格式化器，让其他格式化工具优先
           local formatter = LazyVim.lsp.formatter({
             name = "eslint: lsp",
             primary = false,
@@ -33,7 +34,6 @@ return {
             filter = "eslint",
           })
 
-          -- register the formatter with LazyVim
           LazyVim.format.register(formatter)
         end,
       },

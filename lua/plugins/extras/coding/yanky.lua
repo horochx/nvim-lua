@@ -1,4 +1,4 @@
--- better yank/paste
+-- Yanky：增强的复制粘贴功能，提供历史记录和循环浏览
 return {
   "gbprod/yanky.nvim",
   recommended = true,
@@ -6,8 +6,10 @@ return {
   event = "LazyFile",
   opts = {
     system_clipboard = {
+      -- SSH 连接时禁用系统剪贴板同步以避免性能问题
       sync_with_ring = not vim.env.SSH_CONNECTION,
     },
+    -- 短暂高亮复制区域以提供视觉反馈
     highlight = { timer = 150 },
   },
   keys = {

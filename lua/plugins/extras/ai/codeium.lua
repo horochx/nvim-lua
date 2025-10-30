@@ -1,17 +1,20 @@
+-- Codeium：免费的 AI 代码补全服务，作为 Copilot 的替代方案
 return {
 
-  -- codeium
   {
     "Exafunction/codeium.nvim",
     cmd = "Codeium",
     event = "InsertEnter",
     build = ":Codeium Auth",
     opts = {
+      -- 根据补全模式决定是否启用 cmp 源
       enable_cmp_source = vim.g.ai_cmp,
       virtual_text = {
+        -- 在独立模式下使用虚拟文本，补全模式下由 cmp 处理
         enabled = not vim.g.ai_cmp,
         key_bindings = {
-          accept = false, -- handled by nvim-cmp / blink.cmp
+          -- 统一由补全插件处理接受操作
+          accept = false,
           next = "<M-]>",
           prev = "<M-[>",
         },
@@ -19,7 +22,7 @@ return {
     },
   },
 
-  -- add ai_accept action
+  -- 注册统一的 AI 接受动作供全局快捷键使用
   {
     "Exafunction/codeium.nvim",
     opts = function()
@@ -33,7 +36,7 @@ return {
     end,
   },
 
-  -- codeium cmp source
+  -- 将 Codeium 作为高优先级补全源以优先展示 AI 建议
   {
     "hrsh7th/nvim-cmp",
     optional = true,
@@ -47,6 +50,7 @@ return {
     end,
   },
 
+  -- 在状态栏展示 Codeium 连接状态
   {
     "nvim-lualine/lualine.nvim",
     optional = true,
@@ -56,6 +60,7 @@ return {
     end,
   },
 
+  -- blink.cmp 通过兼容层集成 Codeium
   vim.g.ai_cmp and {
     "saghen/blink.cmp",
     optional = true,
@@ -66,6 +71,7 @@ return {
         providers = {
           codeium = {
             kind = "Codeium",
+            -- 高分值确保排在前面
             score_offset = 100,
             async = true,
           },

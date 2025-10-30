@@ -1,6 +1,8 @@
+-- Neo-tree：功能丰富的文件浏览器
 return {
 
-  -- file explorer
+  -- Neo-tree：强大的文件管理器，支持文件树、Git 状态、缓冲区等视图
+  -- 比 nvim-tree 功能更丰富，支持多种数据源
   {
     "nvim-neo-tree/neo-tree.nvim",
     cmd = "Neotree",
@@ -40,8 +42,8 @@ return {
       vim.cmd([[Neotree close]])
     end,
     init = function()
-      -- FIX: use `autocmd` for lazy-loading neo-tree instead of directly requiring it,
-      -- because `cwd` is not set up properly.
+      -- 使用 autocmd 延迟加载 neo-tree，而不是直接 require
+      -- 因为 cwd 可能还未正确设置
       vim.api.nvim_create_autocmd("BufEnter", {
         group = vim.api.nvim_create_augroup("Neotree_start_directory", { clear = true }),
         desc = "Start Neo-tree with directory",

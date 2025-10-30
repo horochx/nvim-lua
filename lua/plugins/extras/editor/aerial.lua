@@ -1,13 +1,15 @@
+-- Aerial：代码大纲浏览器，显示文档符号树（函数、类、方法等）
 return {
   desc = "Aerial Symbol Browser",
+  -- Aerial：提供代码结构概览，快速导航到函数、类、变量等符号
+  -- 比 Telescope 的符号搜索更直观，适合浏览大型文件
   {
     "stevearc/aerial.nvim",
     event = "LazyFile",
     opts = function()
       local icons = vim.deepcopy(LazyVim.config.icons.kinds)
 
-      -- HACK: fix lua's weird choice for `Package` for control
-      -- structures like if/else/for/etc.
+      -- 修复 Lua 对控制结构（if/else/for 等）使用 Package 图标的问题
       icons.lua = { Package = icons.Control }
 
       ---@type table<string, string[]>|false
@@ -55,7 +57,7 @@ return {
     },
   },
 
-  -- Telescope integration
+  -- Telescope 集成：在 Telescope 中使用 Aerial 符号浏览
   {
     "nvim-telescope/telescope.nvim",
     optional = true,

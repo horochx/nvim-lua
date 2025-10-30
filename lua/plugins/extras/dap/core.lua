@@ -1,3 +1,4 @@
+-- nvim-dap：Debug Adapter Protocol 客户端，为 Neovim 提供调试功能
 ---@param config {type?:string, args?:string[]|fun():string[]?}
 local function get_args(config)
   local args = type(config.args) == "function" and (config.args() or {}) or config.args or {} --[[@as string[] | string ]]
@@ -5,8 +6,10 @@ local function get_args(config)
 
   config = vim.deepcopy(config)
   ---@cast args string[]
+  -- 提示用户输入运行参数
   config.args = function()
     local new_args = vim.fn.expand(vim.fn.input("Run with args: ", args_str)) --[[@as string]]
+    -- Java 调试器需要字符串格式的参数
     if config.type and config.type == "java" then
       ---@diagnostic disable-next-line: return-type-mismatch
       return new_args
@@ -24,9 +27,9 @@ return {
 
     dependencies = {
       "rcarriga/nvim-dap-ui",
-      -- virtual text for the debugger
       {
         "theHamsta/nvim-dap-virtual-text",
+        -- 在代码中显示变量值，提升调试体验
         opts = {},
       },
     },
@@ -53,13 +56,15 @@ return {
     },
 
     config = function()
-      -- load mason-nvim-dap here, after all adapters have been setup
+      -- mason-nvim-dap 需要在所有适配器设置完成后加载
       if LazyVim.has("mason-nvim-dap.nvim") then
         require("mason-nvim-dap").setup(LazyVim.opts("mason-nvim-dap.nvim"))
       end
 
+      -- 设置断点行的高亮
       vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
+      -- 定义调试标记图标
       for name, sign in pairs(LazyVim.config.icons.dap) do
         sign = type(sign) == "table" and sign or { sign }
         vim.fn.sign_define(
@@ -68,7 +73,7 @@ return {
         )
       end
 
-      -- setup dap config by VsCode launch.json file
+      -- 支持通过 VSCode launch.json 配置调试
       local vscode = require("dap.ext.vscode")
       local json = require("plenary.json")
       vscode.json_decode = function(str)
@@ -77,7 +82,7 @@ return {
     end,
   },
 
-  -- fancy UI for the debugger
+  -- 调试界面
   {
     "rcarriga/nvim-dap-ui",
     dependencies = { "nvim-neotest/nvim-nio" },
@@ -91,6 +96,7 @@ return {
       local dap = require("dap")
       local dapui = require("dapui")
       dapui.setup(opts)
+      -- 自动打开/关闭 UI 以简化工作流
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open({})
       end
@@ -103,27 +109,22 @@ return {
     end,
   },
 
-  -- mason.nvim integration
+  -- Mason 集成，自动安装调试适配器
   {
     "jay-babu/mason-nvim-dap.nvim",
     dependencies = "mason.nvim",
     cmd = { "DapInstall", "DapUninstall" },
     opts = {
-      -- Makes a best effort to setup the various debuggers with
-      -- reasonable debug configurations
+      -- 自动为已安装的语言安装适配器
       automatic_installation = true,
 
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
       handlers = {},
 
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
       ensure_installed = {
-        -- Update this to ensure that you have the debuggers for the langs you want
+        -- 在此添加需要的调试适配器
       },
     },
-    -- mason-nvim-dap is loaded when nvim-dap loads
+    -- 延迟配置，由 nvim-dap 触发加载
     config = function() end,
   },
 }

@@ -1,9 +1,12 @@
+-- Kulala：在 Neovim 中进行 REST API 测试，类似 Postman 但在编辑器内
 vim.filetype.add({
   extension = {
     ["http"] = "http",
   },
 })
 return {
+  -- Kulala：HTTP 客户端，支持 .http 文件格式的 API 测试
+  -- 让你在编辑器中编写和执行 HTTP 请求，无需离开 Neovim
   {
     "mistweaverco/kulala.nvim",
     ft = "http",

@@ -1,3 +1,4 @@
+-- Supermaven：高性能 AI 代码补全，号称比 Copilot 更快的响应速度
 return {
   {
     "supermaven-inc/supermaven-nvim",
@@ -8,14 +9,17 @@ return {
     },
     opts = {
       keymaps = {
-        accept_suggestion = nil, -- handled by nvim-cmp / blink.cmp
+        -- 统一由补全插件处理接受操作
+        accept_suggestion = nil,
       },
+      -- 在补全模式下禁用内联以避免冲突
       disable_inline_completion = vim.g.ai_cmp,
+      -- 排除不需要补全的特殊文件类型
       ignore_filetypes = { "bigfile", "snacks_input", "snacks_notif" },
     },
   },
 
-  -- add ai_accept action
+  -- 配置统一的接受动作以支持全局快捷键
   {
     "supermaven-inc/supermaven-nvim",
     opts = function()
@@ -33,7 +37,7 @@ return {
     end,
   },
 
-  -- cmp integration
+  -- 集成为 nvim-cmp 补全源
   {
     "hrsh7th/nvim-cmp",
     optional = true,
@@ -49,6 +53,7 @@ return {
     end,
   },
 
+  -- blink.cmp 通过兼容层支持 Supermaven
   vim.g.ai_cmp and {
     "saghen/blink.cmp",
     optional = true,
@@ -67,6 +72,7 @@ return {
     },
   } or nil,
 
+  -- 状态栏显示 Supermaven 状态
   {
     "nvim-lualine/lualine.nvim",
     optional = true,
@@ -76,6 +82,7 @@ return {
     end,
   },
 
+  -- 隐藏启动提示消息以减少干扰
   {
     "folke/noice.nvim",
     optional = true,

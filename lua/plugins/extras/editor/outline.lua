@@ -1,5 +1,6 @@
+-- Outline：代码大纲视图，显示文档符号树
 return {
-  -- Disable `<leader>cs` keymap so it doesn't conflict with `outline.nvim`
+  -- 禁用 <leader>cs 键映射以避免与 outline.nvim 冲突
   {
     "folke/trouble.nvim",
     optional = true,
@@ -7,6 +8,8 @@ return {
       { "<leader>cs", false },
     },
   },
+  -- Outline：侧边栏显示代码结构，类似 VSCode 的大纲视图
+  -- 提供清晰的文档符号层次结构，方便大型文件导航
   {
     "hedyhli/outline.nvim",
     keys = { { "<leader>cs", "<cmd>Outline<cr>", desc = "Toggle Outline" } },
@@ -34,7 +37,7 @@ return {
     end,
   },
 
-  -- edgy integration
+  -- edgy 集成：在侧边栏中显示 Outline
   {
     "folke/edgy.nvim",
     optional = true,

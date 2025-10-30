@@ -1,12 +1,13 @@
--- start screen
+-- Mini.starter：轻量级启动画面插件
 return {
-  -- disable alpha
+  -- 禁用 Snacks dashboard
   { "folke/snacks.nvim", opts = { dashboard = { enabled = false } } },
 
-  -- enable mini.starter
+  -- Mini.starter：提供简洁的启动界面，展示 LazyVim 横幅和快捷操作
+  -- 相比 alpha，mini.starter 更轻量，且与 mini.nvim 生态集成更好
   {
     "nvim-mini/mini.starter",
-    version = false, -- wait till new 0.7.0 release to put it back on semver
+    version = false,
     event = "VimEnter",
     opts = function()
       local logo = table.concat({
@@ -46,7 +47,7 @@ return {
       return config
     end,
     config = function(_, config)
-      -- close Lazy and re-open when starter is ready
+      -- 在 Lazy 窗口打开时关闭它，待 starter 准备好后重新打开
       if vim.o.filetype == "lazy" then
         vim.cmd.close()
         vim.api.nvim_create_autocmd("User", {
@@ -67,7 +68,7 @@ return {
           local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
           local pad_footer = string.rep(" ", 8)
           starter.config.footer = pad_footer .. "⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
-          -- INFO: based on @nvim-mini's recommendation (thanks a lot!!!)
+          -- 基于 @nvim-mini 的建议：仅在 ministarter 文件类型时刷新
           if vim.bo[ev.buf].filetype == "ministarter" then
             pcall(starter.refresh)
           end

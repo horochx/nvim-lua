@@ -1,16 +1,19 @@
+-- Copilot Chat：在编辑器内与 GitHub Copilot 对话，获取代码解释和建议
 return {
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "main",
     cmd = "CopilotChat",
     opts = function()
+      -- 获取用户名并首字母大写以个性化对话界面
       local user = vim.env.USER or "User"
       user = user:sub(1, 1):upper() .. user:sub(2)
       return {
+        -- 打开时自动进入插入模式以提升交互流畅度
         auto_insert_mode = true,
         headers = {
-          user = "  " .. user .. " ",
-          assistant = "  Copilot ",
+          user = "  " .. user .. " ",
+          assistant = "  Copilot ",
           tool = "󰊳  Tool ",
         },
         window = {
@@ -63,6 +66,7 @@ return {
     config = function(_, opts)
       local chat = require("CopilotChat")
 
+      -- 禁用行号以使对话界面更简洁
       vim.api.nvim_create_autocmd("BufEnter", {
         pattern = "copilot-chat",
         callback = function()
@@ -75,7 +79,7 @@ return {
     end,
   },
 
-  -- Edgy integration
+  -- 使用 edgy 将对话窗口固定在侧边栏
   {
     "folke/edgy.nvim",
     optional = true,
@@ -89,7 +93,7 @@ return {
     end,
   },
 
-  -- Blink integration
+  -- 禁用路径补全以避免干扰 CopilotChat 的命令输入
   {
     "saghen/blink.cmp",
     optional = true,
@@ -99,7 +103,6 @@ return {
       sources = {
         providers = {
           path = {
-            -- Path sources triggered by "/" interfere with CopilotChat commands
             enabled = function()
               return vim.bo.filetype ~= "copilot-chat"
             end,

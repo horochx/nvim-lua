@@ -1,4 +1,7 @@
+-- Mini.files：轻量级文件浏览器
 return {
+  -- Mini.files：简洁的文件浏览器，支持预览和快速导航
+  -- 比 neo-tree 更轻量，但功能足够日常使用
   "nvim-mini/mini.files",
   opts = {
     windows = {
@@ -7,8 +10,8 @@ return {
       width_preview = 30,
     },
     options = {
-      -- Whether to use for editing directories
-      -- Disabled by default in LazyVim because neo-tree is used for that
+      -- 是否用于编辑目录
+      -- LazyVim 默认禁用，因为使用 neo-tree
       use_as_default_explorer = false,
     },
   },

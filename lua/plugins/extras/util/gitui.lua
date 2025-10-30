@@ -1,6 +1,8 @@
+-- GitUI：终端 Git TUI 客户端集成，提供更美观的 Git 界面
 return {
 
-  -- Ensure GitUI tool is installed
+  -- 安装 GitUI 工具
+  -- GitUI：使用 Rust 编写的快速 Git 终端界面，替代 lazygit
   {
     "mason-org/mason.nvim",
     opts = { ensure_installed = { "gitui" } },
@@ -21,7 +23,7 @@ return {
       },
     },
     init = function()
-      -- delete lazygit keymap for file history
+      -- 删除 lazygit 的文件历史键映射（使用 GitUI 替代）
       vim.api.nvim_create_autocmd("User", {
         pattern = "LazyVimKeymaps",
         once = true,

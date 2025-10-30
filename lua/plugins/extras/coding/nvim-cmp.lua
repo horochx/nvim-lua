@@ -1,3 +1,4 @@
+-- nvim-cmp：Neovim 的经典补全引擎，生态丰富但性能不如 blink.cmp
 return {
   {
     "saghen/blink.cmp",
@@ -5,27 +6,17 @@ return {
     optional = true,
   },
 
-  -- Setup nvim-cmp
   {
     "hrsh7th/nvim-cmp",
-    version = false, -- last release is way too old
+    version = false,
     event = "InsertEnter",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
     },
-    -- Not all LSP servers add brackets when completing a function.
-    -- To better deal with this, LazyVim adds a custom option to cmp,
-    -- that you can configure. For example:
-    --
-    -- ```lua
-    -- opts = {
-    --   auto_brackets = { "python" }
-    -- }
-    -- ```
     opts = function()
-      -- Register nvim-cmp lsp capabilities
+      -- 注册 LSP 能力以支持补全
       vim.lsp.config("*", { capabilities = require("cmp_nvim_lsp").default_capabilities() })
 
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
@@ -33,7 +24,8 @@ return {
       local defaults = require("cmp.config.default")()
       local auto_select = true
       return {
-        auto_brackets = {}, -- configure any filetype to auto add brackets
+        -- 配置自动括号补全的文件类型
+        auto_brackets = {},
         completion = {
           completeopt = "menu,menuone,noinsert" .. (auto_select and "" or ",noselect"),
         },
@@ -46,11 +38,12 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<CR>"] = LazyVim.cmp.confirm({ select = auto_select }),
           ["<C-y>"] = LazyVim.cmp.confirm({ select = true }),
-          ["<S-CR>"] = LazyVim.cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+          ["<S-CR>"] = LazyVim.cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace }),
           ["<C-CR>"] = function(fallback)
             cmp.abort()
             fallback()
           end,
+          -- Tab 键整合片段跳转和 AI 接受功能
           ["<tab>"] = function(fallback)
             return LazyVim.cmp.map({ "snippet_forward", "ai_nes", "ai_accept" }, fallback)()
           end,
@@ -69,6 +62,7 @@ return {
               item.kind = icons[item.kind] .. item.kind
             end
 
+            -- 限制补全项宽度以保持界面整洁
             local widths = {
               abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
               menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
@@ -84,7 +78,7 @@ return {
           end,
         },
         experimental = {
-          -- only show ghost text when we show ai completions
+          -- 仅在 AI 补全模式下显示幽灵文本
           ghost_text = vim.g.ai_cmp and {
             hl_group = "CmpGhostText",
           } or false,
@@ -95,7 +89,7 @@ return {
     main = "lazyvim.util.cmp",
   },
 
-  -- snippets
+  -- 片段支持
   {
     "hrsh7th/nvim-cmp",
     dependencies = {

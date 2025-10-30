@@ -1,10 +1,12 @@
+-- Dial：智能增减数字、日期、布尔值等
+-- 扩展 Ctrl-A/Ctrl-X，支持更多数据类型（序数、星期、月份、十六进制等）
 local M = {}
 
 ---@param increment boolean
 ---@param g? boolean
 function M.dial(increment, g)
   local mode = vim.fn.mode(true)
-  -- Use visual commands for VISUAL 'v', VISUAL LINE 'V' and VISUAL BLOCK '\22'
+  -- 为 VISUAL、VISUAL LINE、VISUAL BLOCK 模式使用可视命令
   local is_visual = mode == "v" or mode == "V" or mode == "\22"
   local func = (increment and "inc" or "dec") .. (g and "_g" or "_") .. (is_visual and "visual" or "normal")
   local group = vim.g.dials_by_ft[vim.bo.filetype] or "default"
@@ -12,6 +14,8 @@ function M.dial(increment, g)
 end
 
 return {
+  -- Dial：增强的递增/递减功能，支持数字、日期、布尔值、序数等
+  -- 让 Ctrl-A/Ctrl-X 更智能，理解更多数据类型的递增规则
   "monaqa/dial.nvim",
   recommended = true,
   desc = "Increment and decrement numbers, dates, and more",
@@ -32,8 +36,7 @@ return {
     })
 
     local ordinal_numbers = augend.constant.new({
-      -- elements through which we cycle. When we increment, we go down
-      -- On decrement we go up
+      -- 序数词循环：递增向下，递减向上
       elements = {
         "first",
         "second",
@@ -46,10 +49,9 @@ return {
         "ninth",
         "tenth",
       },
-      -- if true, it only matches strings with word boundary. firstDate wouldn't work for example
+      -- false：允许在单词内部匹配（例如 firstDate）
       word = false,
-      -- do we cycle back and forth (tenth to first on increment, first to tenth on decrement).
-      -- Otherwise nothing will happen when there are no further values
+      -- true：循环递增递减（tenth -> first, first -> tenth）
       cyclic = true,
     })
 

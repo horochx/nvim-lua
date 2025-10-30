@@ -1,6 +1,6 @@
--- animations
+-- Mini.animate：为 Neovim 添加平滑动画效果
 return {
-  -- disable snacks scroll when animate is enabled
+  -- 启用 animate 时禁用 snacks scroll 以避免冲突
   {
     "snacks.nvim",
     opts = {
@@ -8,14 +8,14 @@ return {
     },
   },
 
-  -- Animates many common Neovim actions, like scrolling,
-  -- moving the cursor, and resizing windows.
+  -- Mini.animate：为滚动、光标移动、窗口调整等操作添加平滑动画
+  -- 提升视觉体验，让编辑器操作更流畅自然
   {
     "nvim-mini/mini.animate",
     event = "VeryLazy",
     cond = vim.g.neovide == nil,
     opts = function(_, opts)
-      -- don't use animate when scrolling with the mouse
+      -- 鼠标滚动时禁用动画（鼠标滚动通常需要立即响应）
       local mouse_scrolled = false
       for _, scroll in ipairs({ "Up", "Down" }) do
         local key = "<ScrollWheel" .. scroll .. ">"
@@ -32,8 +32,8 @@ return {
         end,
       })
 
-      -- schedule setting the mapping to override the default mapping from `keymaps.lua`
-      -- seems `keymaps.lua` is the last event to execute on `VeryLazy` and it overwrites it
+      -- 延迟设置键映射以覆盖 keymaps.lua 中的默认映射
+      -- keymaps.lua 是 VeryLazy 事件中最后执行的，需要用 schedule 确保覆盖
       vim.schedule(function()
         Snacks.toggle({
           name = "Mini Animate",
