@@ -213,9 +213,6 @@ return {
         vim.lsp.config("*", opts.servers["*"])
       end
 
-      })
-      end
-
       -- 获取通过 mason-lspconfig 可用的所有服务器
       local have_mason = LazyVim.has("mason-lspconfig.nvim")
       local mason_all = have_mason

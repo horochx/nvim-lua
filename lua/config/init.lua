@@ -340,6 +340,9 @@ function M.init()
   -- 在 lazy 初始化前加载选项（确保安装缺失插件后选项生效）
   M.load("options")
 
+  -- 加载 Neovide GUI 配置
+  M.load("neovide")
+
   -- 保存一些选项以追踪默认值
   M._options.indentexpr = vim.o.indentexpr
   M._options.foldmethod = vim.o.foldmethod
